@@ -15,10 +15,12 @@
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-cli": "^2.0.1",
-    "react-native-svg": "^13.10.0"
+    "react-native-svg": "13.4.0"
   },
   "rnpm": {
-    "assets": ["./fonts/"]
+    "assets": [
+      "./fonts/"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

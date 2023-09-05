@@ -1,64 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View,ImageBackground } from 'react-native';
 
-import { useFonts } from 'expo-font';
-import { Registration } from './Screens/Registration';
+import {StyleSheet, View, ImageBackground} from "react-native";
+import { LoginScreen } from "./Screens/LoginScreen";
+import { RegistrationScreen } from "./Screens/RegistrationScreen/RegistrationScreen";
+import { useFonts } from "expo-font";
+import { PostsScreen } from "./Screens/PostsScreen";
 
-const [fontsLoaded] = useFonts({
-  'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-});
+export default function App1() {
+  const [fontsLoaded] = useFonts({
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+  });
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
+  if (!fontsLoaded) {
+    return null;
+  }
+  return (
+    <View style={styles.container}>
+       <ImageBackground
+        source={require("./assets/images/PhotoBG.png")}
+        style={styles.image}>
+        {/* <RegistrationScreen /> */}
+        {/* <LoginScreen /> */}
+        <PostsScreen />
+      </ImageBackground>
+      </View>
+  );
+}
+
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    
+    flex: 1,
+    backgroundColor: "white"
   },
   image: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
-  // text: {
-  //   color: 'white',
-  //   fontSize: 42,
-  //   lineHeight: 84,
-  //   fontWeight: 'bold',
-  //   textAlign: 'center',
-  //   backgroundColor: '#000000c0',
-  // },
-  // containerRegistration: {
-  //   // flex: 2,
-  //   backgroundColor: "white",
-  //   marginTop: 663,
-  //   width: "100%",
-  //   height: "100%",
-    
-  // },
-
-}
-  );
-
-
-
-export default function App() {
-  // const [fontsLoaded] = useFonts({
-  //   'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-  // });
-  return (
-    <View style={styles.container}>
-    <ImageBackground source={require("./assets/California.jpeg")} style={styles.image}>
-        <Registration />
-    </ImageBackground>
-  </View>
-);
-
-}
+});
