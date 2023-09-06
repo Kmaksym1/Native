@@ -6,7 +6,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Linking,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -14,10 +13,8 @@ import {
   Keyboard, // імпорт компонента клавіатури
 } from "react-native";
 
-
 import OrangeButtonAdd from "./addButton";
-import { ActionButton } from "../../Components/actionButton";
-
+// import { ActionButton } from "../../Components/actionButton";
 
 export const RegistrationScreen = () => {
   const [userName, setName] = useState("");
@@ -26,8 +23,17 @@ export const RegistrationScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
+  const userData = () => {
+    Alert.alert(
+      "Credentials",
+      `Name:${userName}, User email: ${userEmail}, Password: ${password}`
+    );
+  };
+
   const handleLogin = () => {
-    console.log("Navigate to the login screen");
+    Alert.alert(
+      "Route to LogIn page"
+    );
   };
   return (
     <KeyboardAvoidingView
@@ -84,18 +90,19 @@ export const RegistrationScreen = () => {
               <Text style={styles.toggleButtonText}>
                 {showPassword ? "Сховати" : "Показати"}
               </Text>
-              
             </TouchableOpacity>
-            
           </View>
-          
-          <ActionButton buttonText="Зареєструватися"/>
+          <TouchableOpacity
+            style={styles.registrationButton}
+            onPress={userData}>
+            <Text style={styles.buttonText}>Зареєструватися</Text>
+          </TouchableOpacity>
           <Text style={styles.loginText}>
-                Вже є акаунт?&nbsp;
-                <Text style={styles.loginLink} onPress={handleLogin}>
-                    Увійти
-                </Text>
+            Вже є акаунт?&nbsp;
+            <Text style={styles.loginLink} onPress={handleLogin}>
+              Увійти
             </Text>
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -151,8 +158,22 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: "#E8E8E8",
     marginTop: 20,
-    marginBottom:43,
+    marginBottom: 43,
     paddingHorizontal: 10,
+  },
+  submitContainer: {
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: "white",
+  },
+  registrationButton: {
+    width: "90%",
+    backgroundColor: "#FF6C00",
+    height: 51,
+    paddingHorizontal: 32,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
   toggleButtonText: {
     color: "#1B4371",
@@ -161,9 +182,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 16,
     color: "#1B4371",
-},
-loginLink: {
+  },
+  loginLink: {
     color: "#1B4371",
     textDecorationLine: "underline",
-},
+  },
 });

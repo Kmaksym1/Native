@@ -1,14 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import React from "react";
 
-export const ActionButton = ({ buttonText, widthOfButtonComp }) => {
-    
-    const onPress = () => setCount((prevCount) => prevCount + 1);
-    
-    const widthOfButton = widthOfButtonComp ? widthOfButtonComp : "90%";
+export const ActionButton = ({ buttonText }) => {
     
   return (
-    <TouchableOpacity style={{...styles.registrationButton, width: widthOfButton}} onPress={onPress}>
+    <TouchableOpacity style={styles.registrationButton}>
       <Text style={styles.buttonText}>{buttonText}</Text>
     </TouchableOpacity>
   );
@@ -19,14 +15,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     backgroundColor: "white",
   },
-  registrationButton: {
+    registrationButton: {
+      width: "90%",
     backgroundColor: "#FF6C00",
     height: 51,
     paddingHorizontal: 32,
-    // paddingVertical: 16,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 43,
   },
 });

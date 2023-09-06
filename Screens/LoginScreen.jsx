@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Alert,
   TouchableWithoutFeedback, // імпорт компонента обгортки
   Keyboard, // імпорт компонента клавіатури
 } from "react-native";
@@ -18,10 +19,19 @@ export const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const userData = () => {
+    Alert.alert(
+      "Credentials",
+      `User email: ${userEmail}, Password: ${password}`
+    );
+  };
 
   const handleLogin = () => {
-    console.log("Navigate to the login screen");
+    Alert.alert(
+      "Route to Main page"
+    );
   };
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
@@ -64,8 +74,9 @@ export const LoginScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
-
-          <ActionButton buttonText="Увійти"/>
+          <TouchableOpacity style={styles.registrationButton} onPress={userData}>
+            <Text style={styles.buttonText}>Увійти</Text>
+          </TouchableOpacity>
           <Text style={styles.loginText}>
             Немає акаунту?&nbsp;
             <Text style={styles.loginLink} onPress={handleLogin}>
@@ -127,9 +138,22 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: "#E8E8E8",
     marginTop: 20,
-    marginBottom:43,
+    marginBottom: 43,
     paddingHorizontal: 10,
-
+  },
+  submitContainer: {
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: "white",
+  },
+    registrationButton: {
+      width: "90%",
+    backgroundColor: "#FF6C00",
+    height: 51,
+    paddingHorizontal: 32,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
   toggleButtonText: {
     color: "#1B4371",
