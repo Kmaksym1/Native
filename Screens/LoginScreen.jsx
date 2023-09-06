@@ -11,27 +11,26 @@ import {
   TouchableWithoutFeedback, // імпорт компонента обгортки
   Keyboard, // імпорт компонента клавіатури
 } from "react-native";
+import * as Yup from "yup";
+import { Formik } from "formik";
 
-import { ActionButton } from "../Components/actionButton";
+const SignupSchema = Yup.object().shape({
+  password: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  email: Yup.string().email("Invalid email").required("Required"),
+});
 
 export const LoginScreen = () => {
-  const [userEmail, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const userData = () => {
-    Alert.alert(
-      "Credentials",
-      `User email: ${userEmail}, Password: ${password}`
-    );
-  };
 
   const handleLogin = () => {
-    Alert.alert(
-      "Route to Main page"
-    );
+    Alert.alert("Route to Main page");
   };
-  
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
@@ -39,44 +38,71 @@ export const LoginScreen = () => {
         <View
           style={{ ...styles.form, marginBottom: isShowKeyboard ? -240 : 0 }}>
           <Text style={styles.text}>Увійти</Text>
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            validationSchema={SignupSchema}
+            onSubmit={(values) => {
+              console.log(values);
+              Alert.alert(
+                "Credentials",
+                `email: ${values.email}, password: ${values.password}`
+              );
+            }}>
+            {({ handleChange, handleSubmit, values, errors, touched }) => (
+              <View style={styles.formikContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Адреса електронної пошти"
+                  onChangeText={handleChange("email")}
+                  value={values.email}
+                  onFocus={() => {
+                    setIsShowKeyboard(true);
+                  }}
+                  onBlur={() => {
+                    setIsShowKeyboard(false);
+                  }}
+                />
+                {errors.email && touched.email ? (
+                  <Text>{errors.email}</Text>
+                ) : null}
+                <View style={styles.passwordInputContainer}>
+                  <TextInput
+                    style={styles.passwordInput}
+                    placeholder="Пароль"
+                    secureTextEntry={!showPassword}
+                    value={values.password}
+                    onChangeText={handleChange("password")}
+                    onFocus={() => {
+                      setIsShowKeyboard(true);
+                    }}
+                    onBlur={() => {
+                      setIsShowKeyboard(false);
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.toggleButton}>
+                    <Text style={styles.toggleButtonText}>
+                      {showPassword ? "Сховати" : "Показати"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                
+                {errors.password && touched.password ? (
+                  <Text>{errors.password}</Text>
+                ) : null}
+                <TouchableOpacity
+                  style={styles.registrationButton}
+                  onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Увійти</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Адреса електронної пошти"
-            onChangeText={setEmail}
-            value={userEmail}
-            onFocus={() => {
-              setIsShowKeyboard(true);
-            }}
-            onBlur={() => {
-              setIsShowKeyboard(false);
-            }}
-          />
-          <View style={styles.passwordInputContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Пароль"
-              secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={setPassword}
-              onFocus={() => {
-                setIsShowKeyboard(true);
-              }}
-              onBlur={() => {
-                setIsShowKeyboard(false);
-              }}
-            />
-            <TouchableOpacity
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.toggleButton}>
-              <Text style={styles.toggleButtonText}>
-                {showPassword ? "Сховати" : "Показати"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.registrationButton} onPress={userData}>
-            <Text style={styles.buttonText}>Увійти</Text>
-          </TouchableOpacity>
           <Text style={styles.loginText}>
             Немає акаунту?&nbsp;
             <Text style={styles.loginLink} onPress={handleLogin}>
@@ -128,6 +154,13 @@ const styles = StyleSheet.create({
   orangeButtonAdd: {
     marginLeft: -15,
   },
+  formikContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  passwordInput: {
+   width:"80%", 
+  },
   passwordInputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -146,8 +179,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     backgroundColor: "white",
   },
-    registrationButton: {
-      width: "90%",
+  registrationButton: {
+    width: "90%",
     backgroundColor: "#FF6C00",
     height: 51,
     paddingHorizontal: 32,

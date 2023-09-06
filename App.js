@@ -20,8 +20,8 @@ export default function App1() {
        <ImageBackground
         source={require("./assets/images/PhotoBG.png")}
         style={styles.image}>
-        {/* <RegistrationScreen /> */}
-        <LoginScreen />
+        <RegistrationScreen />
+        {/* <LoginScreen /> */}
         {/* <PostsScreen /> */}
         </ImageBackground>
         </TouchableWithoutFeedback>

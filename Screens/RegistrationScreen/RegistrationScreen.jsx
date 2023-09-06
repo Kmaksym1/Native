@@ -10,31 +10,34 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback, // імпорт компонента обгортки
-  Keyboard, // імпорт компонента клавіатури
+  Keyboard,
 } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 import OrangeButtonAdd from "./addButton";
-// import { ActionButton } from "../../Components/actionButton";
+
+const SignupSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  password: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  email: Yup.string().email("Invalid email").required("Required"),
+});
 
 export const RegistrationScreen = () => {
-  const [userName, setName] = useState("");
-  const [userEmail, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
-  const userData = () => {
-    Alert.alert(
-      "Credentials",
-      `Name:${userName}, User email: ${userEmail}, Password: ${password}`
-    );
-  };
-
   const handleLogin = () => {
-    Alert.alert(
-      "Route to LogIn page"
-    );
+    Alert.alert("Route to LogIn page");
   };
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
@@ -46,57 +49,95 @@ export const RegistrationScreen = () => {
             <OrangeButtonAdd style={styles.orangeButtonAdd} />
           </View>
           <Text style={styles.text}>Реєстрація</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setName}
-            value={userName}
-            placeholder="Логін"
-            onFocus={() => {
-              setIsShowKeyboard(true);
+          <Formik
+            initialValues={{
+              name: "",
+              password: "",
+              email: "",
             }}
-            onBlur={() => {
-              setIsShowKeyboard(false);
-            }}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Адреса електронної пошти"
-            onChangeText={setEmail}
-            value={userEmail}
-            onFocus={() => {
-              setIsShowKeyboard(true);
-            }}
-            onBlur={() => {
-              setIsShowKeyboard(false);
-            }}
-          />
-          <View style={styles.passwordInputContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Пароль"
-              secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={setPassword}
-              onFocus={() => {
-                setIsShowKeyboard(true);
-              }}
-              onBlur={() => {
-                setIsShowKeyboard(false);
-              }}
-            />
-            <TouchableOpacity
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.toggleButton}>
-              <Text style={styles.toggleButtonText}>
-                {showPassword ? "Сховати" : "Показати"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={styles.registrationButton}
-            onPress={userData}>
-            <Text style={styles.buttonText}>Зареєструватися</Text>
-          </TouchableOpacity>
+            validationSchema={SignupSchema}
+            onSubmit={(values) => {
+              console.log(values);
+              Alert.alert(
+                "Credentials",
+                `Name:${values.name}, User email: ${values.email}, Password: ${values.password}`
+              );
+            }}>
+            {({
+              handleChange,
+              handleSubmit,
+              // handleBlur,
+              values,
+              errors,
+              touched,
+            }) => (
+              <View style={styles.formikContainer}>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={handleChange("name")}
+                  value={values.name}
+                  placeholder="Логін"
+                  onBlur={() => {
+                    setIsShowKeyboard(false);
+                  }}
+                  onFocus={() => {
+                    setIsShowKeyboard(true);
+                  }}
+                />
+                {errors.name && touched.name ? (
+                  <Text>{errors.name}</Text>
+                ) : null}
+
+                <TextInput
+                  style={styles.input}
+                  placeholder="Адреса електронної пошти"
+                  onChangeText={handleChange("email")}
+                  value={values.email}
+                  onFocus={() => {
+                    setIsShowKeyboard(true);
+                  }}
+                  onBlur={() => {
+                    setIsShowKeyboard(false);
+                  }}
+                />
+                {errors.email && touched.email ? (
+                  <Text>{errors.email}</Text>
+                ) : null}
+                <View style={styles.passwordInputContainer}>
+                  <TextInput
+                    style={styles.passwordInput}
+                    placeholder="Пароль"
+                    secureTextEntry={!showPassword}
+                    value={values.password}
+                    onChangeText={handleChange("password")}
+                    onFocus={() => {
+                      setIsShowKeyboard(true);
+                    }}
+                    onBlur={() => {
+                      setIsShowKeyboard(false);
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.toggleButton}>
+                    <Text style={styles.toggleButtonText}>
+                      {showPassword ? "Сховати" : "Показати"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                
+                {errors.password && touched.password ? (
+                  <Text>{errors.password}</Text>
+                ) : null}
+                <TouchableOpacity
+                  style={styles.registrationButton}
+                  onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Зареєструватися</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
+
           <Text style={styles.loginText}>
             Вже є акаунт?&nbsp;
             <Text style={styles.loginLink} onPress={handleLogin}>
@@ -148,6 +189,10 @@ const styles = StyleSheet.create({
   orangeButtonAdd: {
     marginLeft: -15,
   },
+  formikContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
   passwordInputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -158,8 +203,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: "#E8E8E8",
     marginTop: 20,
-    marginBottom: 43,
+   
     paddingHorizontal: 10,
+  },
+  passwordInput: {
+   width: "80%" 
   },
   submitContainer: {
     alignItems: "center",
@@ -174,6 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 43,
   },
   toggleButtonText: {
     color: "#1B4371",
