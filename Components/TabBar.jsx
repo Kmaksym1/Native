@@ -33,10 +33,8 @@ const styles = StyleSheet.create({
     width: 70,
     height: 51,
     paddingHorizontal: 32,
-    // paddingVertical: 16,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 43,
   },
 });

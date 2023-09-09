@@ -3,25 +3,19 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  TouchableOpacity,
   ImageBackground,
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { ActionButton } from "../Components/actionButton";
+
 import { LogOut } from "../Components/Icons";
-import { TabBar } from "../Components/TabBar";
 
 export const PostsScreen = () => {
+
+
   return (
     <SafeAreaView style={styles.postsContainer}>
       <View>
-        <View style={styles.header}>
-          <Text style={styles.text}>Публікації</Text>
-          <LogOut style={styles.logOut} />
-        </View>
-
         <ScrollView>
           <View style={styles.userCard}>
             <ImageBackground
@@ -34,8 +28,6 @@ export const PostsScreen = () => {
           </View>
         </ScrollView>
       </View>
-
-      <TabBar/>
     </SafeAreaView>
   );
 };
@@ -85,12 +77,5 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 16,
-  },
-
-
-  tinyLogo: {
-    marginTop: 50,
-    width: 40,
-    height: 40,
   },
 });

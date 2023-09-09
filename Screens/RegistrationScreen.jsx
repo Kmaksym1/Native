@@ -15,7 +15,9 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import OrangeButtonAdd from "./addButton";
+import { BackgroundContainer } from "../Components/background";
+import { useNavigation } from "@react-navigation/native";
+import { Add } from "../Components/Icons";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -31,22 +33,25 @@ const SignupSchema = Yup.object().shape({
 
 export const RegistrationScreen = () => {
 
+  const navigation = useNavigation();
+
   const [showPassword, setShowPassword] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-
-  const handleLogin = () => {
-    Alert.alert("Route to LogIn page");
-  };
   
   return (
+
+
+<BackgroundContainer>
+      
+
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
           style={{ ...styles.form, marginBottom: isShowKeyboard ? -190 : 0 }}>
           <View style={styles.avatarAndButtonContainer}>
-            <Image style={styles.avatar} />
-            <OrangeButtonAdd style={styles.orangeButtonAdd} />
+              <Image style={styles.avatar} />
+              <Add style={styles.orangeButtonAdd}/>
           </View>
           <Text style={styles.text}>Реєстрація</Text>
           <Formik
@@ -58,10 +63,7 @@ export const RegistrationScreen = () => {
             validationSchema={SignupSchema}
             onSubmit={(values) => {
               console.log(values);
-              Alert.alert(
-                "Credentials",
-                `Name:${values.name}, User email: ${values.email}, Password: ${values.password}`
-              );
+              navigation.navigate("Home")
             }}>
             {({
               handleChange,
@@ -125,7 +127,7 @@ export const RegistrationScreen = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                
+
                 {errors.password && touched.password ? (
                   <Text>{errors.password}</Text>
                 ) : null}
@@ -140,13 +142,14 @@ export const RegistrationScreen = () => {
 
           <Text style={styles.loginText}>
             Вже є акаунт?&nbsp;
-            <Text style={styles.loginLink} onPress={handleLogin}>
+            <Text style={styles.loginLink} onPress={()=> navigation.navigate("Login", )}>
               Увійти
             </Text>
           </Text>
         </View>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+      </BackgroundContainer>
   );
 };
 
@@ -187,7 +190,9 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   orangeButtonAdd: {
-    marginLeft: -15,
+    position: "absolute",
+    // marginLeft: -13,
+    right: -13
   },
   formikContainer: {
     width: "100%",
