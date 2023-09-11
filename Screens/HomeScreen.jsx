@@ -1,15 +1,18 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { CreatePostsScreen } from "./CreatePostsScreen";
+// import { CrPoSC } from "./CrPoSC";
 
 import { ArrayLeft, Grid, LogOut, PlusIcon, User } from "../Components/Icons";
 import { ProfileScreen } from "./ProfileScreen";
 import { PostsScreen } from "./PostsScreen";
+import { useNavigation } from "@react-navigation/native";
+import { CreatePostsScreen } from "./CreatePostsScreen";
 
 const Tabs = createBottomTabNavigator();
 
-const Home = () => {
+export const Home = () => {
+    const navigation = useNavigation();
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
@@ -22,7 +25,7 @@ const Home = () => {
                 <Grid fillcolor={fillcolor} strokeColor={strokeColor} />
               </View>
             );
-          } else if (route.name === "Create Posts Screen") {
+          } else if (route.name === "CreatePostsScreen") {
             return (
               <View style={focused ? styles.buttonActive : null}>
                 <PlusIcon strokeColor={strokeColor} />
@@ -50,14 +53,17 @@ const Home = () => {
                       
               ) }}
       />
-          <Tabs.Screen name="Create Posts Screen" component={CreatePostsScreen}
+          <Tabs.Screen name="CreatePostsScreen" component={CreatePostsScreen}
               options={{
                 title: "Створити публікацію",
                   headerLeft: () => (
             <ArrayLeft
-              onPress={() => alert("This is a button!")}
+            onPress={() => {
+                navigation.navigate("Home", { screen: "Posts Screen" })
+              }}
             />
-          )}}
+                  )
+              }}
           />
       <Tabs.Screen
         name="Profile Screen"
@@ -84,5 +90,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-export default Home;

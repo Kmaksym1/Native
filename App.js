@@ -1,67 +1,92 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 
 import { RegistrationScreen } from "./Screens/RegistrationScreen";
 import { LoginScreen } from "./Screens/LoginScreen";
-import { PostsScreen } from "./Screens/PostsScreen";
-import Home from "./Screens/HomeScreen";
-import { CreatePostsScreen } from "./Screens/CreatePostsScreen";
 import { ArrayLeft } from "./Components/Icons";
 import { CommentsScreen } from "./Screens/CommentsScreen";
-
+import * as Font from "expo-font";
+import { MapScreen } from "./Screens/MapScreen";
+import { Home } from "./Screens/HomeScreen";
 const MainStack = createStackNavigator(); // вказує на групу навігаторів
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-  });
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        Roboto: require("./assets/fonts/Roboto-Regular.ttf"), 
+      });
+    }
+  
+    loadFonts();
+  }, []);
+  
+  // const [fontsLoaded] = useFonts({
+  //   "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+  //   "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+  // });
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  // if (!fontsLoaded) {
+  //   return null;
+  // }
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Registration">
-        <MainStack.Screen name="Registration" component={RegistrationScreen}
-        options={{ title: null, headerShown: false, headerLeft: null }}/>
+      <MainStack.Navigator initialRouteName="Home">
+        <MainStack.Screen
+          name="Registration"
+          component={RegistrationScreen}
+          options={{ title: null, headerShown: false, headerLeft: null }}
+        />
         <MainStack.Screen
           name="Login"
           component={LoginScreen}
           options={{ title: null, headerShown: false, headerLeft: null }}
         />
-        <MainStack.Screen name="Home" component={Home} 
-          // options={{headerStyle: { height: 0 }}}
+        <MainStack.Screen
+          name="Home"
+          component={Home}
           options={{
-            headerShown: false
+            headerShown: false,
           }}
         />
-        {/* <MainStack.Screen
-          name="Створити публікацію"
-          component={CreatePostsScreen}
-          options={{
-            headerLeft: () => (
-              <ArrayLeft
-                onPress={() => alert("This is a button!")}
-              />
-            ),
-          }}
-        /> */}
+
         <MainStack.Screen
-          name="Коментарі"
+          
+          name="Comments"
           component={CommentsScreen}
-          options={{
+          options={({navigation}) => ({
+            title: "Коментарі",
             headerLeft: () => (
               <ArrayLeft
-                onPress={() => alert("This is a button!")}
+                onPress={() => {
+                  navigation.navigate("Home");
+                }}
               />
             ),
-          }}
+          })}
+        />
+        <MainStack.Screen
+          
+          name="MapScreen"
+          component={MapScreen}
+          options={({navigation}) => ({
+            title: "Карта",
+            // headerRight: () => (
+            //   <ArrayLeft
+            //     onPress={() => {
+            //       // navigation.navigate("Home", { screen: "Posts Screen" })
+            //         console.log("tap back");
+            //     }}
+            //   />
+            // ),
+          })}
         />
       </MainStack.Navigator>
+      
     </NavigationContainer>
   );
 }

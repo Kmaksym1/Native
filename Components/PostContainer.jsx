@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
 import { MassagesIcon, LikesIcon, MapPin } from "../Components/Icons";
 
-export const PostContainer = () => {
+export const PostContainer = ({ hide }) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.postContainer}>
       <Image
@@ -12,17 +14,21 @@ export const PostContainer = () => {
       <Text>Ліс</Text>
 
       <View style={styles.postInfoContainer}>
-        <View style={styles.comments_likes_container}>
+        <TouchableOpacity style={styles.comments_likes_container}
+        onPress={()=> navigation.navigate("Comments")}
+        >
           <MassagesIcon />
           <Text style={{ paddingRight: 18 }}>8</Text>
-          <LikesIcon />
-          <Text>153</Text>
-        </View>
+          {!hide && <LikesIcon />}
+          {!hide && <Text>153</Text>}
+        </TouchableOpacity>
 
-        <View style={styles.locationContainer}>
+        <TouchableOpacity style={styles.locationContainer}
+          onPress={() =>navigation.navigate("MapScreen")}
+        >
           <MapPin />
           <Text style={{ textDecorationLine: "underline" }}>Ukraine</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -32,7 +38,7 @@ const styles = StyleSheet.create({
     paddingBottom: 34,
   },
   image: {
-    width: 363,
+    // width: "100%",
     height: 240,
     backgroundColor: "#F6F6F6",
     borderWidth: 1,

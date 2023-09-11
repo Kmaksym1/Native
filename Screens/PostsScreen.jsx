@@ -6,17 +6,23 @@ import {
   ImageBackground,
   SafeAreaView,
   ScrollView,
+  FlatList,
 } from "react-native";
 
 import { LogOut } from "../Components/Icons";
+import { PostContainer } from "../Components/PostContainer";
 
 export const PostsScreen = () => {
 
-
+  const data = [
+    { id: "1", text: "Post 1" },
+    { id: "2", text: "Post 2" },
+    { id: "3", text: "Post 3" },
+  ];
   return (
     <SafeAreaView style={styles.postsContainer}>
-      <View>
-        <ScrollView>
+      
+        
           <View style={styles.userCard}>
             <ImageBackground
               source={require("../assets/images/avatarGirl.png")}
@@ -26,8 +32,16 @@ export const PostsScreen = () => {
               <Text>email@example.com</Text>
             </View>
           </View>
-        </ScrollView>
-      </View>
+
+      
+      <FlatList
+          showsVerticalScrollIndicator={false}
+          data={data}
+        renderItem={({ item }) => <PostContainer text={item.text} hide={ true} />}
+        keyExtractor={(item) => item.id.toString()}
+        style={styles.posts}
+
+        />
     </SafeAreaView>
   );
 };
@@ -37,6 +51,8 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "white",
     justifyContent: "space-between",
+    paddingHorizontal: 16,
+    
   },
   header: {
     flexDirection: "row",
@@ -63,6 +79,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     flexDirection: "row",
     alignItems: "center",
+    paddingBottom:32,
   },
   userData: {
     paddingHorizontal: 8,
@@ -78,4 +95,5 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 16,
   },
+
 });

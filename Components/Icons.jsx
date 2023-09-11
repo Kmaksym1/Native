@@ -99,7 +99,7 @@ export const Add = (props) => (
   </Svg>
 )
 
-export const Camera = (props) => (
+export const CameraIcon = (props) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     width={24}
@@ -231,6 +231,31 @@ export const Trash = (props) => (
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M10 11v6M14 11v6"
+    />
+  </Svg>
+)
+export const Flip = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="ionicon"
+    viewBox="0 0 512 512"
+    {...props}
+  >
+    <Path
+      fill="none"
+      stroke="white"
+      strokeLinecap="round"
+      strokeMiterlimit={10}
+      strokeWidth={32}
+      d="M320 146s24.36-12-64-12a160 160 0 1 0 160 160"
+    />
+    <Path
+      fill="none"
+      stroke="white"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={32}
+      d="m256 58 80 80-80 80"
     />
   </Svg>
 )

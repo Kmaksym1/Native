@@ -16,26 +16,26 @@ import {
   FlatList,
 } from "react-native";
 import { ArrowUp, Camera, MapPin } from "../Components/Icons";
+import { useNavigation } from "@react-navigation/native";
 
 export const CommentsScreen = () => {
+  // const navigation = useNavigation();
+
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
           style={{
             ...styles.commentsContainer,
             paddingBottom: isShowKeyboard ? 100 : 16,
-            }}>
-                  <ScrollView >
-          <Image
-            source={require("../assets/images/RectangleSunSet.png")}
-            style={styles.image}></Image>
-          {/* <Text style={styles.text}>Завантажте фото</Text> */}
-
-          
+          }}>
+          <ScrollView>
+            <Image
+              source={require("../assets/images/RectangleSunSet.png")}
+              style={styles.image}>
+            </Image>
             <View style={styles.ava_text_container}>
               <Image
                 style={styles.ava}
@@ -57,9 +57,8 @@ export const CommentsScreen = () => {
                 </Text>
               </View>
             </View>
-            
-          </ScrollView >
-          
+          </ScrollView>
+
           <View
             style={{
               ...styles.newCommentContainer,

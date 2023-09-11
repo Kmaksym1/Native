@@ -171,9 +171,10 @@ const styles = StyleSheet.create({
 
   text: {
     marginTop: 27,
-    fontFamily: "Roboto",
+    // fontFamily: "Roboto",
     fontSize: 30,
-    fontWeight: "500",
+    // fontStyle: "normal",
+    // fontWeight: "700",
   },
   input: {
     width: "90%",

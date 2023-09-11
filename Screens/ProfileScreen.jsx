@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     // width:"100%",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    paddingHorizontal:16,
   },
   avatar: {
     marginTop: -60,
