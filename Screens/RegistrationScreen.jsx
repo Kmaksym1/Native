@@ -68,7 +68,6 @@ export const RegistrationScreen = () => {
             {({
               handleChange,
               handleSubmit,
-              // handleBlur,
               values,
               errors,
               touched,
@@ -171,10 +170,7 @@ const styles = StyleSheet.create({
 
   text: {
     marginTop: 27,
-    // fontFamily: "Roboto",
     fontSize: 30,
-    // fontStyle: "normal",
-    // fontWeight: "700",
   },
   input: {
     width: "90%",
@@ -192,7 +188,6 @@ const styles = StyleSheet.create({
   },
   orangeButtonAdd: {
     position: "absolute",
-    // marginLeft: -13,
     right: -13
   },
   formikContainer: {

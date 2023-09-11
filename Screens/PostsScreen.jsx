@@ -5,11 +5,9 @@ import {
   View,
   ImageBackground,
   SafeAreaView,
-  ScrollView,
   FlatList,
 } from "react-native";
 
-import { LogOut } from "../Components/Icons";
 import { PostContainer } from "../Components/PostContainer";
 
 export const PostsScreen = () => {

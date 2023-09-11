@@ -19,7 +19,6 @@ import { ArrowUp, Camera, MapPin } from "../Components/Icons";
 import { useNavigation } from "@react-navigation/native";
 
 export const CommentsScreen = () => {
-  // const navigation = useNavigation();
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   return (
@@ -72,8 +71,6 @@ export const CommentsScreen = () => {
                 paddingRight: 15,
               }}
               placeholder="Коментувати..."
-              //   onChangeText={handleChange("email")}
-              //   value={values.email}
               onFocus={() => {
                 setIsShowKeyboard(true);
               }}
@@ -84,7 +81,6 @@ export const CommentsScreen = () => {
 
             <TouchableOpacity
               style={styles.sendButton}
-              //   onPress={handleSubmit}
             >
               <ArrowUp />
             </TouchableOpacity>
@@ -103,8 +99,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     height: "100%",
     paddingTop: 32,
-
-    // justifyContent: "flex-end",
   },
   image: {
     width: "100%",
@@ -120,9 +114,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    //   gap: 16,
-    // width:"90%"
-    // height:"100%"
   },
   ava: {
     width: 28,
@@ -168,11 +159,8 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     backgroundColor: "#FF6C00",
-
-    // paddingHorizontal: 32,
     borderRadius: 34,
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 43,
   },
 });

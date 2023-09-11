@@ -4,34 +4,17 @@ import {
   Text,
   View,
   Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback, // імпорт компонента обгортки
-  Keyboard,
-  ImageBackground,
-  ScrollView,
   FlatList,
 } from "react-native";
 
 import { BackgroundContainer } from "../Components/background";
-import { useNavigation } from "@react-navigation/native";
 import {
-  Add,
-  LikesIcon,
   LogOut,
-  MapPin,
-  MassagesIcon,
 } from "../Components/Icons";
 import { PostContainer } from "../Components/PostContainer";
 
 export const ProfileScreen = () => {
-  const navigation = useNavigation();
 
-  //   const [showPassword, setShowPassword] = useState(false);
-  //   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const data = [
     { id: "1", text: "Post 1" },
     { id: "2", text: "Post 2" },
@@ -63,7 +46,6 @@ const styles = StyleSheet.create({
     marginTop: 200,
     alignItems: "center",
     backgroundColor: "white",
-    // width:"100%",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingHorizontal:16,

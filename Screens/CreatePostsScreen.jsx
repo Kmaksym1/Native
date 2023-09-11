@@ -11,9 +11,8 @@ import {
   SafeAreaView,
   TouchableHighlight,
   Image,
-  
 } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+
 import * as Location from "expo-location";
 import { CameraIcon, Flip, MapPin, Trash } from "../Components/Icons";
 import { Camera } from "expo-camera";
@@ -153,23 +152,8 @@ export const CreatePostsScreen = () => {
                     setIsShowKeyboard(false);
                   }}
                 />
-                {/* <View style={styles.container}>
-      <MapView
-        style={styles.mapStyle}
-        region={{
-          ...location,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        showsUserLocation={true}
-      >
-        {location && (
-          <Marker title="I am here" coordinate={location} description="Hello" />
-        )}
-      </MapView>
-    </View> */}
+      
               </View>
-              {/* <Button title="Open Settings" onPress={handleOpenSettings} /> */}
               <TouchableHighlight
                 underlayColor="#FF6C00"
                 style={styles.submitButton}
@@ -205,7 +189,6 @@ export const CreatePostsScreen = () => {
 
 const styles = StyleSheet.create({
   createPostsContainer: {
-    // position: "relative",
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 32,
@@ -264,15 +247,6 @@ const styles = StyleSheet.create({
     marginTop: 43,
   },
   photoWrapper: {
-    // with: "100%",
-    // height: 240,
-    // borderWidth: 1,
-    // borderColor: "#E8E8E8",
-    // borderRadius: 8,
-    // backgroundColor: "#F6F6F6",
-    // marginBottom: 8,
-    // justifyContent: "center",
-    // alignItems: "center",
     height: 240,
     backgroundColor: "#F6F6F6",
     borderWidth: 1,
@@ -296,16 +270,4 @@ const styles = StyleSheet.create({
     bottom: 10,
     backgroundColor: "#e8e8e87a",
   },
-  /// map coordinate
-  // container: {
-  //   width:343,
-  //   flex: 1,
-  //   backgroundColor: "#fff",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
-  // mapStyle: {
-  //   width: Dimensions.get("window").width,
-  //   height: Dimensions.get("window").height,
-  // },
 });
