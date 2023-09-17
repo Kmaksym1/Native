@@ -1,45 +1,71 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
   SafeAreaView,
-  FlatList,
+  FlatList
 } from "react-native";
+import {currentUser} from "../Redux/Users/authSelector"
 
 import { PostContainer } from "../Components/PostContainer";
+import { useDispatch, useSelector } from "react-redux";
+
+import { auth } from "../config";
+import { useNavigation } from "@react-navigation/native";
+import { fetchAllPosts } from "../Redux/Posts/postSelector";
+import { getPosts } from "../Redux/Posts/postOperations";
 
 export const PostsScreen = () => {
+  const navigation = useNavigation();
+  const dataUser = useSelector(currentUser);
+  const allPosts = useSelector(fetchAllPosts)
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    // Подписываемся на изменения состояния аутентификации
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+    dispatch(getPosts())
+      if (user) {
+        // Пользователь вошел в систему
+        console.log('Пользователь вошел в систему', dataUser.displayName);
+          navigation.navigate("Home");
+        
+        
+      } else {
+        // Пользователь вышел из системы
+        console.log('Пользователь вышел из системы');
+        navigation.navigate("Login");
+      }
+    });
 
-  const data = [
-    { id: "1", text: "Post 1" },
-    { id: "2", text: "Post 2" },
-    { id: "3", text: "Post 3" },
-  ];
+    // Отписываемся от события при размонтировании компонента
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   return (
     <SafeAreaView style={styles.postsContainer}>
-      
         
           <View style={styles.userCard}>
             <ImageBackground
               source={require("../assets/images/avatarGirl.png")}
               style={styles.image}></ImageBackground>
             <View style={styles.userData}>
-              <Text style={styles.userNameText}>Natali Romanova</Text>
-              <Text>email@example.com</Text>
+              <Text style={styles.userNameText}>{dataUser.displayName}</Text>
+              <Text>{dataUser.email}</Text>
             </View>
           </View>
-
-      
       <FlatList
           showsVerticalScrollIndicator={false}
-          data={data}
-        renderItem={({ item }) => <PostContainer text={item.text} hide={ true} />}
-        keyExtractor={(item) => item.id.toString()}
-        style={styles.posts}
+        data={allPosts}
+        
+        renderItem={({ item }) => <PostContainer item={item} hide={true} />}
+        keyExtractor={(item) => item.id}
+      />
 
-        />
+      
     </SafeAreaView>
   );
 };
@@ -84,7 +110,7 @@ const styles = StyleSheet.create({
   },
   userNameText: {
     fontFamily: "Roboto",
-    fontSize: "13px",
+    fontSize: 13,
     fontStyle: "normal",
     fontWeight: 700,
   },

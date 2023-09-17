@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -7,14 +8,15 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Alert,
-  TouchableWithoutFeedback, // імпорт компонента обгортки
-  Keyboard, // імпорт компонента клавіатури
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { BackgroundContainer } from "../Components/background";
+import { login } from "../Redux/Users/authOperations";
+import { currentUser } from "../Redux/Users/authSelector";
 
 const SignupSchema = Yup.object().shape({
   password: Yup.string()
@@ -23,12 +25,20 @@ const SignupSchema = Yup.object().shape({
     .required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
 });
-
+// Додати логіку логіна на екрані LoginScreen через методи Firebase
 export const LoginScreen = () => {
+ 
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+
+
+  const handleSubmitLogIn = (values) => {
+    dispatch(login(values))
+    navigation.navigate("Home")
+}
 
   return (
     <BackgroundContainer>
@@ -44,9 +54,10 @@ export const LoginScreen = () => {
                 password: "",
               }}
               validationSchema={SignupSchema}
-              onSubmit={(values) => {
-                console.log(values);
-                navigation.navigate("Home")
+              onSubmit={(values, {resetForm}) => {
+                handleSubmitLogIn(values)
+                // authStateChanged(values)
+                resetForm()
               }}>
               {({ handleChange, handleSubmit, values, errors, touched }) => (
                 <View style={styles.formikContainer}>

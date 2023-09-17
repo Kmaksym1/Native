@@ -18,21 +18,28 @@ import { CameraIcon, Flip, MapPin, Trash } from "../Components/Icons";
 import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import * as MediaLibrary from "expo-media-library";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost } from "../Redux/Posts/postOperations";
+import { postsUploading } from "../Redux/Posts/postSelector";
 
+  
 export const CreatePostsScreen = () => {
   const navigation = useNavigation();
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [photoName, setPhotoName] = useState("");
   const [locationName, setLocationName] = useState("");
   const [locationUser, setLocationUser] = useState(null);
+const dispatch = useDispatch()
 
-  
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasMediaPermission, setHasMediaPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [photoUri, setPhotoUri] = useState(null);
 
+  const loading = useSelector(postsUploading);
+  // console.log(loading)
+  
   useEffect(() => {
     (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
@@ -41,7 +48,7 @@ export const CreatePostsScreen = () => {
       setHasMediaPermission(mediaPermission.status === "granted");
     })();
   }, []);
-
+  
   const handlePublishPost = () => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -55,13 +62,19 @@ export const CreatePostsScreen = () => {
         longitude: location.coords.longitude,
       };
       setLocationUser(coords);
-        console.log("locationUser", locationUser);
-    console.log("locationName", locationName);
-    console.log("photoName", photoName);
+    //     console.log("locationUser", locationUser);
+    // console.log("locationName", locationName);
+    //   console.log("photoName", typeof (photoName));   
+    dispatch(createPost({
+      locationUser,
+      locationName,
+      photoName,
+      photoUri
+    }))
       navigation.navigate("Home", { screen: "Posts Screen" })
     })();
   }
-  
+
   const takePicture = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
@@ -70,13 +83,24 @@ export const CreatePostsScreen = () => {
     }
   };
 
+
+//   if (loading) {return(<View
+//     style={[
+//       { justifyContent: "center", alignItems: "center" },
+//     ]}>
+//     <Text style={{ fontFamily: "Roboto", fontSize: 22 }}>
+//       Loading...
+//     </Text>
+//   </View>)
+    
+// }
   if (hasCameraPermission === null) {
     return (
       <View
         style={[
           { justifyContent: "center", alignItems: "center" },
         ]}>
-        <Text style={{ fontFamily: "Roboto-Medium", fontSize: 22 }}>
+        <Text style={{ fontFamily: "Roboto", fontSize: 22 }}>
           Loading...
         </Text>
       </View>
@@ -87,11 +111,13 @@ export const CreatePostsScreen = () => {
   }
 
   return (
+  
     <SafeAreaView>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.createPostsContainer}>
+            
             {!photoUri ? (
               <Camera
                 style={styles.photoWrapper}
@@ -124,6 +150,7 @@ export const CreatePostsScreen = () => {
                 <Image source={{ uri: photoUri }} style={styles.photo} />
               </View>
             )}
+
             <Text style={styles.text}>Завантажте фото</Text>
             <View style={styles.inputContainer}>
               <TextInput
@@ -179,7 +206,7 @@ export const CreatePostsScreen = () => {
                 }}>
                 <Trash />
               </View>
-            </View>
+              </View>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -219,7 +246,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#BDBDBD",
-    fontFamily: "Roboto",
+    // fontFamily: "Roboto",
     fontStyle: "normal",
     fontWeight: 400,
   },

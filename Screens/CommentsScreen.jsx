@@ -1,7 +1,5 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -15,11 +13,28 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
-import { ArrowUp, Camera, MapPin } from "../Components/Icons";
-import { useNavigation } from "@react-navigation/native";
+import { ArrowUp } from "../Components/Icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { updatePost } from "../Redux/Posts/postOperations";
+import { CommentsContainer } from "../Components/CommentsContainer";
 
 export const CommentsScreen = () => {
+  const dispatch = useDispatch();
+  const route = useRoute();
+  const moment = require("moment");
+  moment.locale("uk"); // Set the locale to Ukrainian
 
+  const { item } = route.params;
+  const postId = item.id;
+  console.log("comment!@#!#",item.comments);
+  const [comment, setComment] = useState("");
+  // useEffect(() => {}, []);
+
+  const commentSend = () => {
+    const date = moment().utcOffset("+05:00").format("MMMM DD , YYYY | hh:mm");
+    dispatch(updatePost({ postId, comment, date }));
+  };
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   return (
     <KeyboardAvoidingView
@@ -27,36 +42,26 @@ export const CommentsScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
           style={{
-            ...styles.commentsContainer,
+            ...styles.commentContainer,
             paddingBottom: isShowKeyboard ? 100 : 16,
           }}>
-          <ScrollView>
-            <Image
-              source={require("../assets/images/RectangleSunSet.png")}
-              style={styles.image}>
-            </Image>
-            <View style={styles.ava_text_container}>
-              <Image
-                style={styles.ava}
-                source={require("../assets/images/avatarHighscrapers.png")}
-              />
-              <View style={styles.commentTextContainer}>
-                <Text>
-                  Really love your most recent photo. I’ve been trying to
-                  capture the same thing for a few months and would love some
-                  tips!
-                </Text>
-                <Text
-                  style={{
-                    ...styles.text,
-                    paddingTop: 8,
-                    alignSelf: "flex-end",
-                  }}>
-                  09 червня, 2020 | 08:40
-                </Text>
-              </View>
-            </View>
-          </ScrollView>
+          <Image source={{ uri: item.photoUri }} style={styles.image}></Image>
+
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={item.comments}
+            renderItem={({ comments }) => <Text>{comments}</Text>}
+            keyExtractor={(element) => element.length}
+          ></FlatList>
+      
+      {/* <ScrollView
+  showsVerticalScrollIndicator={false}
+  data={item.comments} // Use item.comment as the data if it's an array of comments
+>
+        {item.comments.map((element) => (<CommentsContainer key={element.length} com={element} />
+    // <Text key={element.length}>{element}</Text> // Use element.comments to display each comment
+  ))}
+</ScrollView> */}
 
           <View
             style={{
@@ -70,6 +75,8 @@ export const CommentsScreen = () => {
                 paddingBottom: 15,
                 paddingRight: 15,
               }}
+              onChangeText={setComment}
+              value={comment}
               placeholder="Коментувати..."
               onFocus={() => {
                 setIsShowKeyboard(true);
@@ -79,9 +86,7 @@ export const CommentsScreen = () => {
               }}
             />
 
-            <TouchableOpacity
-              style={styles.sendButton}
-            >
+            <TouchableOpacity style={styles.sendButton} onPress={commentSend}>
               <ArrowUp />
             </TouchableOpacity>
           </View>
@@ -92,7 +97,7 @@ export const CommentsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  commentsContainer: {
+  commentContainer: {
     position: "relative",
     paddingLeft: 16,
     paddingRight: 16,
@@ -109,31 +114,7 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     marginBottom: 8,
   },
-  ava_text_container: {
-    marginTop: 24,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-  },
-  ava: {
-    width: 28,
-    height: 28,
-    borderRadius: 28,
-  },
-  commentTextContainer: {
-    padding: 16,
-    width: "90%",
-    borderTopEndRadius: 6,
-    borderBottomEndRadius: 6,
-    borderBottomStartRadius: 6,
-    backgroundColor: "#F6F6F6",
-  },
-  text: {
-    color: "#BDBDBD",
-    fontFamily: "Roboto",
-    fontStyle: "normal",
-    fontWeight: 400,
-  },
+
   input: {
     borderBottomWidth: 1,
     borderBottomColor: "#E8E8E8",

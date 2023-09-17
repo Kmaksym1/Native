@@ -1,25 +1,22 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image, FlatList } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 import { BackgroundContainer } from "../Components/background";
-import {
-  LogOut,
-} from "../Components/Icons";
+import { LogOutComponent } from "../Components/logOutComponent";
 import { PostContainer } from "../Components/PostContainer";
+import { getPosts } from "../Redux/Posts/postOperations";
+import { fetchAllPosts } from "../Redux/Posts/postSelector";
+import { currentUser } from "../Redux/Users/authSelector";
 
 export const ProfileScreen = () => {
-
-  const data = [
-    { id: "1", text: "Post 1" },
-    { id: "2", text: "Post 2" },
-    { id: "3", text: "Post 3" },
-  ];
+  const dataUser = useSelector(currentUser);
+  const allPosts = useSelector(fetchAllPosts)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getPosts())
+  }, [])
+  console.log("allPostsProfile",allPosts)
   return (
     <BackgroundContainer>
       <View style={styles.form}>
@@ -27,13 +24,14 @@ export const ProfileScreen = () => {
           style={styles.avatar}
           source={require("../assets/images/avatarGirl.png")}
         />
-        <LogOut style={styles.logOut} />
-        <Text style={styles.userNameText}>Natalia Romanova</Text>
+        <LogOutComponent style={styles.logOut} />
+        <Text style={styles.userNameText}>{dataUser.displayName}</Text>
+
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={data}
-          renderItem={({ item }) => <PostContainer text={item.text} />}
-          keyExtractor={(item) => item.id.toString()}
+          data={allPosts}
+          renderItem={({ item }) => <PostContainer item={item} />}
+          keyExtractor={(item) => item.id}
         />
       </View>
     </BackgroundContainer>
@@ -42,13 +40,14 @@ export const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   form: {
+    // width:"100%",
     flex: 1,
     marginTop: 200,
     alignItems: "center",
     backgroundColor: "white",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingHorizontal:16,
+    paddingHorizontal: 16,
   },
   avatar: {
     marginTop: -60,
@@ -58,12 +57,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   logOut: {
-    position: "absolute",
-    right: 16,
-    top: 22,
+    right: 0,
+    top: 10,
   },
-    userNameText: {
-        paddingBottom: 34,
+  userNameText: {
+    paddingBottom: 34,
     marginTop: 27,
     fontFamily: "Roboto",
     fontSize: 30,

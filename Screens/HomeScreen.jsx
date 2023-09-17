@@ -3,16 +3,24 @@ import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { CrPoSC } from "./CrPoSC";
 
-import { ArrayLeft, Grid, LogOut, PlusIcon, User } from "../Components/Icons";
+import { ArrayLeft, Grid, PlusIcon, User } from "../Components/Icons";
 import { ProfileScreen } from "./ProfileScreen";
 import { PostsScreen } from "./PostsScreen";
 import { useNavigation } from "@react-navigation/native";
 import { CreatePostsScreen } from "./CreatePostsScreen";
 
+import {LogOutComponent} from "../Components/logOutComponent"
+import { useSelector } from "react-redux";
+import { postsUploading } from "../Redux/Posts/postSelector";
+// import { currentUser } from "../Redux/Users/authSelector";
+// import { useSelector } from "react-redux";
+
 const Tabs = createBottomTabNavigator();
 
 export const Home = () => {
-    const navigation = useNavigation();
+
+  const navigation = useNavigation();
+  
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
@@ -44,12 +52,11 @@ export const Home = () => {
       <Tabs.Screen
         name="Posts Screen"
         component={PostsScreen}
-              options={{
+        options={{
                   title: "Публікації",
                   headerRight: () => (
-                <View style={{ paddingRight: 18 }}><LogOut 
-                  onPress={() => alert("This is LogOut!")}
-                /></View>
+                <LogOutComponent />
+                    
                       
               ) }}
       />

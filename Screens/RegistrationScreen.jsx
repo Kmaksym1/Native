@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -6,18 +7,22 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback, // імпорт компонента обгортки
   Keyboard,
 } from "react-native";
+
 import { Formik } from "formik";
 import * as Yup from "yup";
+import * as Device from 'expo-device';
+
+const iosModel = Device.modelName;
 
 import { BackgroundContainer } from "../Components/background";
 import { useNavigation } from "@react-navigation/native";
 import { Add } from "../Components/Icons";
+import { register, registerDB } from "../Redux/Users/authOperations";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -34,9 +39,17 @@ const SignupSchema = Yup.object().shape({
 export const RegistrationScreen = () => {
 
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const handleSubmit = (values) => {
+  //   dispatch(rigester(values))
+  //   navigation.navigate("Home")
+  console.log("values reg", values);
+  dispatch(register(values));
+  // resetForm(); 
+  navigation.navigate("Login");
+  }
   
   return (
 
@@ -54,17 +67,23 @@ export const RegistrationScreen = () => {
               <Add style={styles.orangeButtonAdd}/>
           </View>
           <Text style={styles.text}>Реєстрація</Text>
-          <Formik
-            initialValues={{
-              name: "",
-              password: "",
-              email: "",
-            }}
-            validationSchema={SignupSchema}
-            onSubmit={(values) => {
-              console.log(values);
-              navigation.navigate("Home")
-            }}>
+            <Formik
+              initialValues={{
+                name: "",
+                password: "",
+                email: "",
+              }}
+              validationSchema={SignupSchema}
+              onSubmit={(values) => {
+                handleSubmit(values)
+                console.log("values reg", values);
+                // // navigation.navigate("Home")
+                // dispatch(register(values));
+              }
+                // handleSubmit(values)
+                // navigation.navigate("Home")
+              }
+            >
             {({
               handleChange,
               handleSubmit,
@@ -132,7 +151,8 @@ export const RegistrationScreen = () => {
                 ) : null}
                 <TouchableOpacity
                   style={styles.registrationButton}
-                  onPress={handleSubmit}>
+                    onPress={handleSubmit}
+                  >
                   <Text style={styles.buttonText}>Зареєструватися</Text>
                 </TouchableOpacity>
               </View>
